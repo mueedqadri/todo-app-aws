@@ -63,7 +63,6 @@ export default function ToDo() {
         <div className="row">
           <div className="col-sm"></div>
           <div className="col-sm mt-5 ">
-            <h3>To-Do List</h3>
             <ul className="list-group">
               {list && list.length > 0 ? (
                 list.map((element, idx) => {
