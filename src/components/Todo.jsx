@@ -30,14 +30,14 @@ export default function ToDo() {
       });
   };
 
-  const addToDb = (description) => {
+  const addToDb = () => {
     fetch(`${process.env.REACT_APP_END_POINT}/tasks/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      body: JSON.stringify({ description: description }),
+      body: JSON.stringify({  description: newItem }),
     }).then((res) => {
       if (res.ok) {
         setNewItem("");
