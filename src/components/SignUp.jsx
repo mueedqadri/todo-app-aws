@@ -1,54 +1,75 @@
 ﻿import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
   const [error, setError] = useState({});
+  const [message, setMessage ] = useState('');
 
   const handleChange = (event) => {
-    let user;
+    console.log();
     user[event.target.name] = event.target.value;
     setUser(user);
   };
 
+  const register = () => {
+    const { fullName, email, password } = user;
+    let data = {
+      username: email.split("@")[0],
+      name: fullName,
+      email,
+      password,
+    };
+    fetch(`${process.env.REACT_APP_END_POINT}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((response) => {
+      if (response.status == 200) {
+        navigate("/login", {state: {message : 'Account Created Successfully! Please Login'}});
+      } else {
+        setMessage('Internal issue!')
+      }
+    });
+  };
+
   const onSubmit = () => {
-    const { firstName, lastName, confirmPassword, email, password } = user;
+    const { fullName, confirmPassword, email, password } = user;
     let err = {};
-    if (!firstName) {
-      err.firstName = "Please enter your First Name";
-    } else if (!/^[A-Za-z0-9]+$/.test(firstName)) {
-      err.firstName = "Enter a valid First Name";
-    }
-    if (!lastName) {
-      err.lastName = "Please enter your Last Name";
-    } else if (!/^[A-Za-z0-9]+$/.test(lastName)) {
-      err.lastName = "Enter a valid Last Name";
+    if (!fullName) {
+      err.fullName = "Please enter your First Name";
+    } else if (!/^[A-Za-z0-9]+$/.test(fullName)) {
+      err.fullName = "Enter a valid First Name";
     }
     if (!email) {
       err.email = "Please enter your Email";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       err.email = "Enter a valid email id";
     }
-    if (!password.length) {
+    if (!password || !password.length) {
       err.password = "Please enter your password";
     } else if (password.length < 8) {
       err.password = "Password must be at least 8 characters long";
     }
-    if (!confirmPassword.length) {
+    if (!confirmPassword || !confirmPassword.length) {
       err.confirmPassword = "Please confirm your password";
     } else if (password !== confirmPassword) {
       err.confirmPassword = "Password does not match";
     }
     if (Object.getOwnPropertyNames(err).length === 0) {
-      window.location.href = "/dummypage.html";
+      register();
     } else {
       setError(err);
     }
@@ -60,32 +81,19 @@ export default function SignUp() {
           <div className="col-sm"></div>
           <div className="col-sm mt-5">
             <h3>User Registration</h3>
+            <h5 style={{color: 'red'}}>{message}</h5>
             <div className="col-md-12 ">
               <div>
-                <label htmlFor="firstName">First Name</label>
+                <label htmlFor="fullName">First Name</label>
                 <input
-                  id="firstName"
-                  name="firstName"
+                  id="fullName"
+                  name="fullName"
                   type="text"
                   onChange={handleChange}
                   className="form-control"
-                  style={error.firstName && { border: "solid 1px red" }}
+                  style={error.fullName && { border: "solid 1px red" }}
                 />
-                {error.firstName && <p>{error.firstName}</p>}
-              </div>
-            </div>
-            <div className="col-md-12 ">
-              <div>
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  onChange={handleChange}
-                  className="form-control"
-                  style={error.lastName && { border: "solid 1px red" }}
-                />
-                {error.lastName && <p>{error.lastName}</p>}
+                {error.fullName && <p>{error.fullName}</p>}
               </div>
             </div>
             <div className="col-md-12 ">
