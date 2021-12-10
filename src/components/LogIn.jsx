@@ -112,7 +112,7 @@ export default function LogIn() {
               <br></br>
               <div>
                 Need an account?&nbsp;
-                <Link to="/">Sign Up</Link>
+                <Link to="/signup">Sign Up</Link>
               </div>
             </div>
           </div>

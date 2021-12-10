@@ -74,6 +74,11 @@ export default function SignUp() {
       setError(err);
     }
   };
+
+  const toLogin = ()=>{
+    navigate("/login")
+  }
+
   return (
     <div>
       <div className="container">
@@ -148,9 +153,9 @@ export default function SignUp() {
               </button>
               <br></br>
               <br></br>
-              <div>
+              <div onClick={toLogin}>
                 Already have an account?&nbsp;
-                <Link to="login">Log In</Link>
+                <div to="login" style={{color:'blue', cursor:'pointer'}}>Log In</div>
               </div>
             </div>
           </div>
